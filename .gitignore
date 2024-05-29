@@ -1,5 +1,2 @@
-*.d.ts
-*.js
-!jest.config.js
-node_modules
-dist/
+/bin/
+/node_modules/
