@@ -3,7 +3,7 @@ import * as kx from "@pulumi/kubernetesx";
 const appName = "nginx";
 
 const pb = new kx.PodBuilder({
-  containers: [{ image: "nginx", ports: { http: 80 } }],
+  containers: [{ image: "nginx", ports: { http: 8092 } }],
 });
 
 const deployment = new kx.Deployment(appName, {
