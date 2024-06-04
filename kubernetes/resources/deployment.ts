@@ -1,6 +1,5 @@
 import { Deployment as KubernetesDeployment } from "@cdktf/provider-kubernetes/lib/deployment";
 import { Construct } from "constructs";
-import Service from "./service";
 
 export default class Deployment extends KubernetesDeployment {
   constructor(scope: Construct, id: string, container: any) {
@@ -25,15 +24,5 @@ export default class Deployment extends KubernetesDeployment {
         },
       },
     });
-  }
-
-  createService(id: string): Service {
-    return new Service(this, id, [
-      {
-        protocol: "TCP",
-        port: 80,
-        targetPort: "80",
-      },
-    ]);
   }
 }

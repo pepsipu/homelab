@@ -7,7 +7,7 @@
   "private": true,
   "scripts": {
     "apply": "cdktf apply",
-    "clean": "rm -r cdktf.out terraform.homelab.tfstate terraform.homelab.tfstate.backup",
+    "clean": "rm -rf cdktf.out terraform.homelab.tfstate terraform.homelab.tfstate.backup",
     "get": "cdktf get",
     "build": "tsc",
     "synth": "cdktf synth",
