@@ -4,6 +4,7 @@ import { App, TerraformStack } from "cdktf";
 import { KubernetesProvider } from "@cdktf/provider-kubernetes/lib/provider";
 import { HelmProvider } from "@cdktf/provider-helm/lib/provider";
 import { Release as HelmRelease } from "@cdktf/provider-helm/lib/release";
+import WebService from "./web";
 
 const kubernetesConfig = {
   configPath: "~/.kube/config",
@@ -18,11 +19,19 @@ class MyStack extends TerraformStack {
       kubernetes: kubernetesConfig,
     });
 
-    new HelmRelease(this, "nginx", {
-      name: "nginx",
-      repository: "https://charts.bitnami.com/bitnami",
-      chart: "nginx",
+    new HelmRelease(this, "traefik", {
+      name: "traefik",
+      repository: "https://traefik.github.io/charts",
+      chart: "traefik",
     });
+
+    new HelmRelease(this, "authelia", {
+      name: "authelia",
+      repository: "https://charts.authelia.com",
+      chart: "authelia",
+    });
+
+    new WebService(this, "httpd");
   }
 }
 
