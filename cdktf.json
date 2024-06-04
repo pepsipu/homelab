@@ -1,0 +1,8 @@
+{
+  "language": "typescript",
+  "app": "npx ts-node ./kubernetes/index.ts",
+  "terraformProviders": [],
+  "terraformModules": [],
+  "context": {},
+  "projectId": "8bb8dee7-20a8-49a6-8d4f-dc9b652c9d2a"
+}
