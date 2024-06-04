@@ -14,4 +14,4 @@ services are applications that serve users through web interface. the traefik ro
 
 --[ kubernetes
 
-this folder contains pulumi code for parsing and scaffolding infra defined in apps and services
+this folder contains cdktf code for parsing and scaffolding infra defined in apps and services

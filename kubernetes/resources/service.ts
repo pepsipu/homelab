@@ -12,7 +12,7 @@ export default class Service extends KubernetesService {
       },
       spec: {
         selector: appId,
-        type: "ClusterIP",
+        type: "LoadBalancer",
         port,
       },
     });

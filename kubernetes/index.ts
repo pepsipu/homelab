@@ -10,7 +10,7 @@ const kubernetesConfig = {
   configPath: "~/.kube/config",
 };
 
-class MyStack extends TerraformStack {
+class Homelab extends TerraformStack {
   constructor(scope: Construct, id: string) {
     super(scope, id);
     new KubernetesProvider(this, "kubernetes", kubernetesConfig);
@@ -19,22 +19,25 @@ class MyStack extends TerraformStack {
       kubernetes: kubernetesConfig,
     });
 
-    new HelmRelease(this, "traefik", {
-      name: "traefik",
-      repository: "https://traefik.github.io/charts",
-      chart: "traefik",
-    });
+    // new HelmRelease(this, "traefik", {
+    //   name: "traefik",
+    //   repository: "https://traefik.github.io/charts",
+    //   chart: "traefik",
+    // });
 
-    new HelmRelease(this, "authelia", {
-      name: "authelia",
-      repository: "https://charts.authelia.com",
-      chart: "authelia",
-    });
+    // new HelmRelease(this, "authelia", {
+    //   name: "authelia",
+    //   repository: "https://charts.authelia.com",
+    //   chart: "authelia",
+    // });
 
-    new WebService(this, "httpd");
+    new WebService(this, "httpd", {
+      image: "httpd:latest",
+      authenticated: false,
+    });
   }
 }
 
 const app = new App();
-new MyStack(app, "homelab");
+new Homelab(app, "homelab");
 app.synth();
