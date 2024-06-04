@@ -3,7 +3,7 @@ import { Construct } from "constructs";
 import Service from "./service";
 
 export interface IngressRouteConfig {
-  service: Service;
+  serviceId: string;
   pattern: string;
   middlewares: any[];
 }
@@ -15,7 +15,7 @@ export default class IngressRoute extends Manifest {
   constructor(
     scope: Construct,
     id: string,
-    { service, pattern, middlewares }: IngressRouteConfig
+    { serviceId, pattern, middlewares }: IngressRouteConfig
   ) {
     const ingressRouteName = `${id}-ingress-route`;
     super(scope, ingressRouteName, {
@@ -36,7 +36,7 @@ export default class IngressRoute extends Manifest {
               services: [
                 {
                   kind: "Service",
-                  name: service.id,
+                  name: serviceId,
                   port: 80,
                   scheme: "http",
                 },

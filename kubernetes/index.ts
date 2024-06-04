@@ -13,17 +13,29 @@ const kubernetesConfig = {
 class Homelab extends TerraformStack {
   constructor(scope: Construct, id: string) {
     super(scope, id);
-    new KubernetesProvider(this, "kubernetes", kubernetesConfig);
+    const kubernetes = new KubernetesProvider(
+      this,
+      "kubernetes",
+      kubernetesConfig
+    );
 
     new HelmProvider(this, "helm", {
       kubernetes: kubernetesConfig,
     });
 
-    // new HelmRelease(this, "traefik", {
-    //   name: "traefik",
-    //   repository: "https://traefik.github.io/charts",
-    //   chart: "traefik",
-    // });
+    new HelmRelease(this, "traefik", {
+      name: "traefik",
+      repository: "https://traefik.github.io/charts",
+      chart: "traefik",
+      values: [
+        JSON.stringify({
+          dashboard: {
+            enable: true,
+            ingressRoute: true,
+          },
+        }),
+      ],
+    });
 
     // new HelmRelease(this, "authelia", {
     //   name: "authelia",
@@ -32,7 +44,7 @@ class Homelab extends TerraformStack {
     // });
 
     new WebService(this, "httpd", {
-      image: "httpd:latest",
+      image: "nginx:latest",
       authenticated: false,
     });
   }

@@ -37,7 +37,7 @@ export default class WebService extends Construct {
     ]);
 
     new IngressRoute(this, id, {
-      service,
+      serviceId: `${id}-service`,
       middlewares: [],
       pattern: "PathPrefix(`/`)",
     });
