@@ -43,7 +43,7 @@ class Homelab extends TerraformStack {
     //   chart: "authelia",
     // });
 
-    new WebService(this, "httpd", {
+    new WebService(this, "nginx", {
       image: "nginx:latest",
       authenticated: false,
     });
