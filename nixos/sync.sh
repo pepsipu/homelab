@@ -1,0 +1,1 @@
+rsync -a --rsync-path="sudo rsync" . 192.168.4.196:/etc/nixos
