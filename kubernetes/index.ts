@@ -1,41 +1,56 @@
 import { Construct } from "constructs";
-import { App, Chart, ChartProps } from "cdk8s";
-import { KubeDeployment, KubeService, IntOrString } from "./imports/k8s";
+import { App, Chart, ChartProps, Helm } from "cdk8s";
+import { Deployment, Service } from "cdk8s-plus-30";
+import * as argo from "@opencdk8s/cdk8s-argocd-resources";
 
 export class Homelab extends Chart {
   constructor(scope: Construct, id: string, props: ChartProps = {}) {
     super(scope, id, props);
 
-    const label = { app: "hello-k8s" };
-
-    new KubeService(this, "service", {
+    new argo.ArgoCdApplication(this, "HomelabApp", {
+      metadata: {
+        name: "homelab",
+        namespace: "argocd",
+      },
       spec: {
-        type: "LoadBalancer",
-        ports: [{ port: 80, targetPort: IntOrString.fromNumber(8080) }],
-        selector: label,
+        project: "default",
+        source: {
+          repoURL: "https://github.com/pepsipu/homelab.git",
+          path: "examplepath",
+          targetRevision: "HEAD",
+        },
+        destination: {
+          server: "https://kubernetes.default.svc",
+        },
+        syncPolicy: {
+          syncOptions: ["ApplyOutOfSyncOnly=true"],
+        },
       },
     });
 
-    new KubeDeployment(this, "deployment", {
+    new argo.ArgoCdProject(this, "HomelabProject", {
+      metadata: {
+        name: "homelab",
+        namespace: "argocd",
+      },
       spec: {
-        replicas: 1,
-        selector: {
-          matchLabels: label,
-        },
-        template: {
-          metadata: { labels: label },
-          spec: {
-            containers: [
-              {
-                name: "hello-kubernetes",
-                image: "paulbouwer/hello-kubernetes:1.7",
-                ports: [{ containerPort: 8080 }],
-              },
-            ],
+        description: "my homelab!!",
+        sourceRepos: ["*"],
+        destination: [
+          {
+            namespace: "default",
+            server: "https://kubernetes.default.svc",
           },
-        },
+        ],
       },
     });
+
+    // const openebs = new Helm(this, "openebs", {
+    //   chart: "openebs/openebs",
+    //   version: "2.5",
+    // });
+
+    const label = { app: "hello-k8s" };
   }
 }
 
