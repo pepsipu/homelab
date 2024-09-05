@@ -6,8 +6,7 @@
     "inlineSourceMap": true,
     "inlineSources": true,
     "lib": ["es2016"],
-    "module": "CommonJS",
-    "noEmit": false,
+    "noEmit": true,
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
@@ -20,9 +19,14 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "stripInternal": true,
-    "target": "ES2017",
-    "outDir": "dist"
+    "allowImportingTsExtensions": true,
+    "target": "ESNext",
+    "module": "NodeNext",
+    "outDir": "dist",
+    "paths": {
+      "@hl/services": ["./src/apps/index.ts"]
+    }
   },
-  "include": ["**/*.ts"],
+  "include": ["**/*.ts", "../**/*.mts"],
   "exclude": ["node_modules", "dist"]
 }
