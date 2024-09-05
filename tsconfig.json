@@ -24,9 +24,9 @@
     "module": "NodeNext",
     "outDir": "dist",
     "paths": {
-      "@hl/services": ["./src/apps/index.ts"]
+      "@hl/apps": ["./kubernetes/src/apps/index.ts"]
     }
   },
-  "include": ["**/*.ts", "../**/*.mts"],
+  "include": ["**/*.ts", "**/*.mts"],
   "exclude": ["node_modules", "dist"]
 }
