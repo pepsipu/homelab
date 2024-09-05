@@ -13,7 +13,7 @@ defaults:
     working-directory: ./kubernetes
 
 env:
-  OCI_REPO: "oci://ghcr.io/pepsipu/homelab"
+  OCI_REPO: "oci://ghcr.io/pepsipu/homelab/manifests"
 
 jobs:
   kubernetes:
