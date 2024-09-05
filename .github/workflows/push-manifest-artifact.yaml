@@ -10,7 +10,7 @@ permissions:
 
 defaults:
   run:
-    working-directory: kubernetes
+    working-directory: ./kubernetes
 
 env:
   OCI_REPO: "oci://ghcr.io/pepsipu/homelab"
@@ -33,6 +33,7 @@ jobs:
         with:
           node-version: 22
           cache: "pnpm"
+          cache-dependency-path: kubernetes/pnpm-lock.yaml
 
       - name: Setup Flux CLI
         uses: fluxcd/flux2/action@main
@@ -45,18 +46,18 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Dependencies
-        run: cd kubernetes && pnpm install
+        run: pnpm install
 
       - name: Generate manifests
-        run: |
-          kustomize build ./manifests/staging > ./deploy/app.yaml
+        run: pnpm dev
 
       - name: Push manifests
         run: |
           flux push artifact $OCI_REPO:$(git rev-parse --short HEAD) \
-            --path="./deploy" \
+            --path="./dist" \
             --source="$(git config --get remote.origin.url)" \
             --revision="$(git branch --show-current)@sha1:$(git rev-parse HEAD)"
+
       - name: Deploy manifests to staging
         run: |
           flux tag artifact $OCI_REPO:$(git rev-parse --short HEAD) --tag staging
