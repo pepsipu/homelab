@@ -1,9 +1,9 @@
 import { Construct } from "constructs";
-import { Chart, Helm } from "cdk8s";
+import { Chart, ChartProps, Helm } from "cdk8s";
 
-export class Router extends Chart {
-  constructor(scope: Construct) {
-    super(scope, "router", {});
+export class TraefikRouter extends Chart {
+  constructor(scope: Construct, id: string, props: ChartProps = {}) {
+    super(scope, id, props);
     new Helm(this, "traefik", {
       chart: "traefik",
       repo: "https://traefik.github.io/charts",
