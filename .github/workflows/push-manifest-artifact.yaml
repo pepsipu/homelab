@@ -58,6 +58,6 @@ jobs:
             --source="$(git config --get remote.origin.url)" \
             --revision="$(git branch --show-current)@sha1:$(git rev-parse HEAD)"
 
-      - name: Deploy manifests to production
+      - name: Tag manifests as latest
         run: |
-          flux tag artifact $OCI_REPO:$(git rev-parse --short HEAD) --tag production
+          flux tag artifact $OCI_REPO:$(git rev-parse --short HEAD) --tag latest
