@@ -3,7 +3,7 @@ import { Construct } from "constructs";
 
 interface OCIRepositoryProps {
   name: string;
-  timeout: string;
+  interval: string;
   url: string;
 }
 
@@ -17,7 +17,7 @@ export class OCIRepository extends ApiObject {
         namespace: "flux-system",
       },
       spec: {
-        interval: props.timeout,
+        interval: props.interval,
         url: props.url,
         ref: {
           tag: "latest",

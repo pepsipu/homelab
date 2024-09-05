@@ -24,7 +24,7 @@ export class FluxInstallation extends Chart {
     new OCIRepository(this, "oci-repo", {
       name: props.name,
       url: props.url,
-      timeout: "5m0s",
+      interval: "0m30s",
     });
   }
 }
