@@ -10,3 +10,5 @@ export async function getApplicationConfigurations(dir: string) {
   );
   return modules;
 }
+
+export class App {}

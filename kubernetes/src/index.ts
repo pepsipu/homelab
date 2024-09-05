@@ -1,6 +1,7 @@
 import { Construct } from "constructs";
 import { App, Chart, ChartProps, Helm } from "cdk8s";
 import { getApplicationConfigurations } from "./apps/index.ts";
+import { Router } from "./router/index.ts";
 
 export class Homelab extends Chart {
   constructor(
@@ -11,7 +12,7 @@ export class Homelab extends Chart {
   ) {
     super(scope, id, props);
 
-    console.log(apps);
+    new Router(scope);
 
     const label = { app: "hello-k8s" };
   }
