@@ -1,0 +1,62 @@
+name: push-manifest-artifact
+
+on:
+  push:
+    branches:
+      - "main"
+
+permissions:
+  packages: write # needed for ghcr.io access
+
+defaults:
+  run:
+    working-directory: kubernetes
+
+env:
+  OCI_REPO: "oci://ghcr.io/pepsipu/homelab"
+
+jobs:
+  kubernetes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "pnpm"
+
+      - name: Setup Flux CLI
+        uses: fluxcd/flux2/action@main
+
+      - name: Login to GHCR
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Dependencies
+        run: cd kubernetes && pnpm install
+
+      - name: Generate manifests
+        run: |
+          kustomize build ./manifests/staging > ./deploy/app.yaml
+
+      - name: Push manifests
+        run: |
+          flux push artifact $OCI_REPO:$(git rev-parse --short HEAD) \
+            --path="./deploy" \
+            --source="$(git config --get remote.origin.url)" \
+            --revision="$(git branch --show-current)@sha1:$(git rev-parse HEAD)"
+      - name: Deploy manifests to staging
+        run: |
+          flux tag artifact $OCI_REPO:$(git rev-parse --short HEAD) --tag staging
