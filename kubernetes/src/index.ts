@@ -14,7 +14,7 @@ export class Homelab extends Chart {
     super(scope, id, props);
 
     new FluxInstallation(this, "flux-repository", {
-      name: "homelab-flux",
+      name: "homelab-repo",
       url: "oci://ghcr.io/pepsipu/homelab/manifests",
     });
     new TraefikRouter(this, "traefik-router");
