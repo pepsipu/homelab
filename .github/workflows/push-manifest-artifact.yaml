@@ -58,6 +58,6 @@ jobs:
             --source="$(git config --get remote.origin.url)" \
             --revision="$(git branch --show-current)@sha1:$(git rev-parse HEAD)"
 
-      - name: Deploy manifests to staging
+      - name: Deploy manifests to production
         run: |
-          flux tag artifact $OCI_REPO:$(git rev-parse --short HEAD) --tag staging
+          flux tag artifact $OCI_REPO:$(git rev-parse --short HEAD) --tag production
