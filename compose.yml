@@ -1,4 +1,4 @@
 include:
-  # - services/compose.yml
+  - services/compose.yml
   - apps/compose.yml
 

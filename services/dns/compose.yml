@@ -12,3 +12,4 @@ services:
       - CLOUDFLARE_API_TOKEN=${CF_API_KEY}
       - DOMAINS=cow.pet
       - PROXIED=false
+      - QUIET=true
