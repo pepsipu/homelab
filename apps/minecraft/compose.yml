@@ -11,6 +11,8 @@ services:
       PAPER_CHANNEL: "experimental"
       MOTD: "i love MILFs (man i love farms)"
       ICON: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Dabney-minimalist-vector.svg/800px-Dabney-minimalist-vector.svg.png"
+      MODRINTH_PROJECTS: >
+        bluemap 
     volumes:
       - /mnt/ssd/mc:/data
       - ./plugins:/plugins
