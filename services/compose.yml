@@ -1,3 +1,3 @@
 include:
   - dns/compose.yml
-  # - ingress/compose.yml
+  - ingress/compose.yml
