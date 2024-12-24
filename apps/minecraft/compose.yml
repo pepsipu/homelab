@@ -16,16 +16,32 @@ services:
     volumes:
       - /mnt/ssd/mc:/data
       - ./plugins:/plugins
-  backups:
-    image: itzg/mc-backup
-    environment:
-      BACKUP_INTERVAL: "2h"
-      RCON_HOST: mc
-      PRE_BACKUP_SCRIPT: |
-        echo "Before backup!"
-        echo "Also before backup from $$RCON_HOST to $$DEST_DIR"
-      POST_BACKUP_SCRIPT_FILE: /post-backup.sh
+  
+  # backups:
+  #   image: itzg/mc-backup
+  #   environment:
+  #     BACKUP_INTERVAL: "2h"
+  #     RCON_HOST: mc
+  #     PRE_BACKUP_SCRIPT: |
+  #       echo "Before backup!"
+  #       echo "Also before backup from $$RCON_HOST to $$DEST_DIR"
+  #     POST_BACKUP_SCRIPT_FILE: /post-backup.sh
+  #   volumes:
+  #     - /mnt/ssd/mc:/data:ro
+  #     - /mnt/hdd/mc-backups:/backups
+  #     - ./post-backup.sh:/post-backup.sh:ro
+
+  nginx:
+    image: nginx
+    security_opt:
+      - no-new-privileges:true
     volumes:
-      - /mnt/ssd/mc:/data:ro
-      - /mnt/hdd/mc-backups:/backups
-      - ./post-backup.sh:/post-backup.sh:ro
+      - ./www:/usr/share/nginx/html:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nginx.entrypoints=web"
+      - "traefik.http.routers.nginx.rule=Host(`mc.cow.pet`)"
+      - "traefik.http.routers.nginx-secure.entrypoints=websecure"
+      - "traefik.http.routers.nginx-secure.rule=Host(`mc.cow.pet`)"
+      - "traefik.http.routers.nginx-secure.tls=true"
+      - "traefik.http.routers.nginx-secure.tls.certresolver=cloudflare"
