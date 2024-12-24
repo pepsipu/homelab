@@ -8,7 +8,22 @@ services:
     environment:
       EULA: "TRUE"
       TYPE: "PAPER"
-      PAPER_CHANNEL: "EXPERIMENTAL"
+      PAPER_CHANNEL: "experimental"
+      MOTD: "i love MILFs (man i love farms)"
+      ICON: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Dabney-minimalist-vector.svg/800px-Dabney-minimalist-vector.svg.png"
     volumes:
       - /mnt/ssd/mc:/data
-  
+      - ./plugins:/plugins
+  backups:
+    image: itzg/mc-backup
+    environment:
+      BACKUP_INTERVAL: "2h"
+      RCON_HOST: mc
+      PRE_BACKUP_SCRIPT: |
+        echo "Before backup!"
+        echo "Also before backup from $$RCON_HOST to $$DEST_DIR"
+      POST_BACKUP_SCRIPT_FILE: /post-backup.sh
+    volumes:
+      - /mnt/ssd/mc:/data:ro
+      - /mnt/hdd/mc-backups:/backups
+      - ./post-backup.sh:/post-backup.sh:ro
