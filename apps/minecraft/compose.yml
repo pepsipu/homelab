@@ -9,27 +9,39 @@ services:
       EULA: "TRUE"
       TYPE: "PAPER"
       PAPER_CHANNEL: "experimental"
-      MOTD: "i love MILFs (man i love farms)"
-      ICON: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Dabney-minimalist-vector.svg/800px-Dabney-minimalist-vector.svg.png"
+      MOTD: "\u00a7c@ mc.cow.pet @\u00a7r\n\u00a73\u00a7lMEET MILFS\u00a7r\u00a7l | \u00a76\u00a7lPET COWS\u00a7r\u00a7l | \u00a7d\u00a7lPUNCH MINORS"
+      ICON: "https://upload.wikimedia.org/wikipedia/commons/e/ee/Spot_the_cow.png"
       MODRINTH_PROJECTS: >
-        bluemap 
+        bluemap
     volumes:
       - /mnt/ssd/mc:/data
-      - ./plugins:/plugins
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mc.entrypoints=web"
+      - "traefik.http.routers.mc.rule=Host(`mc.cow.pet`) && PathPrefix(`/map/`)"
+      - "traefik.http.routers.mc.middlewares=strip-map"
+      - "traefik.http.middlewares.strip-map.stripPrefix.prefixes=/map"
+      - "traefik.http.routers.mc-secure.entrypoints=websecure"
+      - "traefik.http.routers.mc-secure.rule=Host(`mc.cow.pet`) && PathPrefix(`/map/`)"
+      - "traefik.http.routers.mc-secure.middlewares=strip-map"
+      - "traefik.http.routers.mc-secure.tls=true"
+      - "traefik.http.routers.mc-secure.tls.certresolver=cloudflare"
+      - "traefik.http.services.mc.loadbalancer.server.port=8100"
+
   
-  # backups:
-  #   image: itzg/mc-backup
-  #   environment:
-  #     BACKUP_INTERVAL: "2h"
-  #     RCON_HOST: mc
-  #     PRE_BACKUP_SCRIPT: |
-  #       echo "Before backup!"
-  #       echo "Also before backup from $$RCON_HOST to $$DEST_DIR"
-  #     POST_BACKUP_SCRIPT_FILE: /post-backup.sh
-  #   volumes:
-  #     - /mnt/ssd/mc:/data:ro
-  #     - /mnt/hdd/mc-backups:/backups
-  #     - ./post-backup.sh:/post-backup.sh:ro
+  backups:
+    image: itzg/mc-backup
+    environment:
+      BACKUP_INTERVAL: "2h"
+      RCON_HOST: mc
+      PRE_BACKUP_SCRIPT: |
+        echo "Before backup!"
+        echo "Also before backup from $$RCON_HOST to $$DEST_DIR"
+      POST_BACKUP_SCRIPT_FILE: /post-backup.sh
+    volumes:
+      - /mnt/ssd/mc:/data:ro
+      - /mnt/hdd/mc-backups:/backups
+      - ./post-backup.sh:/post-backup.sh:ro
 
   nginx:
     image: nginx
