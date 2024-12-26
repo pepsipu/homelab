@@ -9,10 +9,15 @@ services:
       EULA: "TRUE"
       TYPE: "PAPER"
       PAPER_CHANNEL: "experimental"
-      MOTD: "\u00a7c@ mc.cow.pet @\u00a7r\n\u00a73\u00a7lMEET MILFS\u00a7r\u00a7l | \u00a76\u00a7lPET COWS\u00a7r\u00a7l | \u00a7d\u00a7lPUNCH MINORS"
+      MOTD: "\u00a7c\u00a7l@ mc.cow.pet @\u00a7r\n\u00a73MEET MILFS\u00a7r | \u00a76PET COWS\u00a7r | \u00a7dPUNCH MINORS"
       ICON: "https://upload.wikimedia.org/wikipedia/commons/e/ee/Spot_the_cow.png"
       MODRINTH_PROJECTS: >
-        bluemap
+        bluemap,
+        imageframe,
+        sleeper,
+        chunky,
+        interactionvisualizer,
+      MEMORY: 4G
     volumes:
       - /mnt/ssd/mc:/data
     labels:
