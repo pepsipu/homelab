@@ -20,6 +20,7 @@ services:
         invsee++,
         axgraves,
         interactivechat,
+        tgbridge,
       MEMORY: 4G
     volumes:
       - /mnt/ssd/mc:/data
@@ -40,7 +41,8 @@ services:
   backups:
     image: itzg/mc-backup
     environment:
-      PRUNE_BACKUPS_DAYS: "7"
+      BACKUP_ON_STARTUP: false
+      PRUNE_BACKUPS_DAYS: 7
       BACKUP_INTERVAL: "4h"
       RCON_HOST: mc
       PRE_BACKUP_SCRIPT: |
