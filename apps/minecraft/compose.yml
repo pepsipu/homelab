@@ -19,8 +19,7 @@ services:
         interactionvisualizer,
         invsee++,
         axgraves,
-        interactivechat,
-        tgbridge,
+        tgbridge:Z4RercuF,
       MEMORY: 4G
     volumes:
       - /mnt/ssd/mc:/data
