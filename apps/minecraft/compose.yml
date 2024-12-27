@@ -19,6 +19,7 @@ services:
         interactionvisualizer,
         invsee++,
         axgraves,
+        interactivechat,
       MEMORY: 4G
     volumes:
       - /mnt/ssd/mc:/data
