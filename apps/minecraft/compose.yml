@@ -53,7 +53,7 @@ services:
       - /mnt/hdd/mc-backups:/backups
       - ./post-backup.sh:/post-backup.sh:ro
 
-  nginx:
+  mc-nginx:
     image: nginx
     security_opt:
       - no-new-privileges:true
