@@ -8,13 +8,21 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "./traefik.yml:/traefik.yml:ro"
+      - traefik-dynamic:/etc/traefik/dynamic
+      - letsencrypt:/letsencrypt
     environment:
       - CF_API_EMAIL=${CF_API_EMAIL}
       - CLOUDFLARE_DNS_API_TOKEN=${CF_API_KEY}
+      - TRAEFIK_CERTIFICATESRESOLVERS_cloudflare_ACME_EMAIL=${CF_API_EMAIL}
     restart: always
     networks:
       - traefik
 
 networks:
   traefik:
+    external: true
+
+volumes:
+  letsencrypt:
+  traefik-dynamic:
     external: true
