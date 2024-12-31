@@ -1,3 +1,0 @@
-include:
-  - minecraft/compose.yml
-  - web/compose.yml

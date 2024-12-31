@@ -35,14 +35,17 @@ services:
       - "traefik.http.routers.mc-secure.tls=true"
       - "traefik.http.routers.mc-secure.tls.certresolver=cloudflare"
       - "traefik.http.services.mc.loadbalancer.server.port=8100"
+    networks:
+      - traefik
+    restart: always
 
   
   backups:
     image: itzg/mc-backup
     environment:
       BACKUP_ON_STARTUP: false
-      PRUNE_BACKUPS_DAYS: 7
-      BACKUP_INTERVAL: "4h"
+      PRUNE_BACKUPS_DAYS: 3
+      BACKUP_INTERVAL: "12h"
       RCON_HOST: mc
       PRE_BACKUP_SCRIPT: |
         echo "Before backup!"
@@ -50,8 +53,9 @@ services:
       POST_BACKUP_SCRIPT_FILE: /post-backup.sh
     volumes:
       - /mnt/ssd/mc:/data:ro
-      - /mnt/hdd/mc-backups:/backups
+      - /mnt/ssd/mc-backups-temp:/backups
       - ./post-backup.sh:/post-backup.sh:ro
+    restart: always
 
   mc-nginx:
     image: nginx
@@ -67,3 +71,10 @@ services:
       - "traefik.http.routers.nginx-secure.rule=Host(`mc.cow.pet`)"
       - "traefik.http.routers.nginx-secure.tls=true"
       - "traefik.http.routers.nginx-secure.tls.certresolver=cloudflare"
+    networks:
+      - traefik
+    restart: always
+
+networks:
+  traefik:
+    external: true

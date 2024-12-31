@@ -1,4 +1,0 @@
-include:
-  - services/compose.yml
-  - apps/compose.yml
-

@@ -1,3 +1,0 @@
-include:
-  - ddns/compose.yml
-  - traefik/compose.yml

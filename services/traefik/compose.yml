@@ -8,11 +8,13 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "./traefik.yml:/traefik.yml:ro"
-      - "./dynamic:/etc/traefik/dynamic:ro"
-      - traefik:/letsencrypt
     environment:
       - CF_API_EMAIL=${CF_API_EMAIL}
       - CLOUDFLARE_DNS_API_TOKEN=${CF_API_KEY}
+    restart: always
+    networks:
+      - traefik
 
-volumes:
+networks:
   traefik:
+    external: true
