@@ -23,6 +23,6 @@ networks:
     external: true
 
 volumes:
-  letsencrypt:
   traefik-dynamic:
     external: true
+  letsencrypt:
