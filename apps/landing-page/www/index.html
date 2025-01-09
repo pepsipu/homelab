@@ -1,53 +1,61 @@
 <!DOCTYPE html>
 <html>
-
-<head>
+  <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>pet.cow.LandingPage</title>
-    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="icon" type="image/png" href="favicon.png" />
     <style type="text/css">
-        model-viewer {
-            width: 100%;
-            height: 300px;
-        }
+      model-viewer {
+        width: 100%;
+        height: 300px;
+      }
 
-        body {
-            margin: 40px auto;
-            max-width: 650px;
-            line-height: 1.6;
-            font-size: 18px;
-            color: #444;
-            padding: 0 10px;
-        }
+      body {
+        margin: 40px auto;
+        max-width: 650px;
+        line-height: 1.6;
+        font-size: 18px;
+        color: #444;
+        padding: 0 10px;
+      }
 
-        h1 {
-            line-height: 1.2;
-        }
+      h1 {
+        line-height: 1.2;
+      }
     </style>
-    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
-</head>
+    <script
+      type="module"
+      src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"
+    ></script>
+  </head>
 
-<body>
+  <body>
     <header>
-        <h1>This is the <em>finest</em> petting zoo for cows.</h1>
+      <h1>This is the <em>finest</em> petting zoo for cows.</h1>
     </header>
     <p>
-        Or, actually, it's the front page of my homelab. Here, I host a variety of
-        services for friends and family. If you would like me to run a service for
-        you, please <a href="https://pepsipu.com">reach out</a> to me and I'd be
-        happy to. Right now, you can:
+      Or, actually, it's the front page of my homelab. Here, I host a variety of
+      services for friends and family. If you would like me to run a service for
+      you, please <a href="https://pepsipu.com">reach out</a> to me and I'd be
+      happy to. Right now, you can:
     </p>
 
     <ul>
-        <li>Play Minecraft on this <a href="https://mc.cow.pet">server</a>,</li>
-        <li>And pet the cow below!</li>
+      <li>Log into your <a href="https://sso.cow.pet">account</a>,</li>
+      <li>Play Minecraft on this <a href="https://mc.cow.pet">server</a>,</li>
+      <li>And pet the cow below!</li>
     </ul>
     You can also find the infrastructure configuration in this
     <a href="https://github.com/pepsipu/homelab">git repository</a>.
 
-    <model-viewer alt="A spotted animal homeomorphic to a sphere." src="models/spot.glb" auto-rotate camera-controls
-        camera-orbit="135deg 55deg 4m" disable-tap />
-</body>
-
+    <model-viewer
+      alt="A spotted animal homeomorphic to a sphere."
+      src="models/spot.glb"
+      auto-rotate
+      camera-controls
+      camera-orbit="135deg 55deg 4m"
+      disable-tap
+    />
+  </body>
 </html>
