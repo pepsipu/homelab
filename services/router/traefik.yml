@@ -6,6 +6,9 @@ entryPoints:
     address: ":80"
   websecure:
     address: ":443"
+    http:
+      tls:
+        certResolver: cloudflare
 
 providers:
   docker:
@@ -13,6 +16,9 @@ providers:
   file:
     directory: /etc/traefik/dynamic
     watch: true
+
+serversTransport:
+  insecureSkipVerify: true
 
 certificatesResolvers:
   cloudflare:

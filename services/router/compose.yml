@@ -1,7 +1,7 @@
 services:
   traefik:
     image: traefik
-    container_name: traefik
+    restart: unless-stopped
     ports:
       - "80:80"
       - "443:443"
@@ -14,7 +14,6 @@ services:
       - CF_API_EMAIL=${CF_API_EMAIL}
       - CLOUDFLARE_DNS_API_TOKEN=${CF_API_KEY}
       - TRAEFIK_CERTIFICATESRESOLVERS_cloudflare_ACME_EMAIL=${CF_API_EMAIL}
-    restart: always
     networks:
       - traefik
 

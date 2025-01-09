@@ -11,8 +11,6 @@ services:
       - "traefik.http.routers.web-nginx.rule=Host(`cow.pet`)"
       - "traefik.http.routers.web-nginx-secure.entrypoints=websecure"
       - "traefik.http.routers.web-nginx-secure.rule=Host(`cow.pet`)"
-      - "traefik.http.routers.web-nginx-secure.tls=true"
-      - "traefik.http.routers.web-nginx-secure.tls.certresolver=cloudflare"
     networks:
       - traefik
     restart: always

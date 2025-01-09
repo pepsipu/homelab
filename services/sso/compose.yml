@@ -1,0 +1,24 @@
+services:
+  kanidm:
+    image: kanidm/server:latest
+    restart: unless-stopped
+    volumes:
+      - kanidm-data:/data
+      - ./server.toml:/data/server.toml:ro
+      - ./certs/chain.pem:/data/chain.pem:ro
+      - ./certs/key.pem:/data/key.pem:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.kanidm-secure.entrypoints=websecure"
+      - "traefik.http.routers.kanidm-secure.rule=Host(`sso.cow.pet`)"
+      - "traefik.http.services.kanidm-secure.loadbalancer.server.scheme=https"
+      - "traefik.http.services.kanidm-secure.loadbalancer.server.port=8443"
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true
+
+volumes:
+  kanidm-data:

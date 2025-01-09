@@ -32,8 +32,6 @@ services:
       - "traefik.http.routers.mc-secure.entrypoints=websecure"
       - "traefik.http.routers.mc-secure.rule=Host(`mc.cow.pet`) && PathPrefix(`/map/`)"
       - "traefik.http.routers.mc-secure.middlewares=strip-map"
-      - "traefik.http.routers.mc-secure.tls=true"
-      - "traefik.http.routers.mc-secure.tls.certresolver=cloudflare"
       - "traefik.http.services.mc.loadbalancer.server.port=8100"
     networks:
       - traefik
@@ -69,8 +67,6 @@ services:
       - "traefik.http.routers.nginx.rule=Host(`mc.cow.pet`)"
       - "traefik.http.routers.nginx-secure.entrypoints=websecure"
       - "traefik.http.routers.nginx-secure.rule=Host(`mc.cow.pet`)"
-      - "traefik.http.routers.nginx-secure.tls=true"
-      - "traefik.http.routers.nginx-secure.tls.certresolver=cloudflare"
     networks:
       - traefik
     restart: always
