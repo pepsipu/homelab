@@ -37,40 +37,6 @@ services:
       - traefik
     restart: always
 
-  
-  backups:
-    image: itzg/mc-backup
-    environment:
-      BACKUP_ON_STARTUP: false
-      PRUNE_BACKUPS_DAYS: 3
-      BACKUP_INTERVAL: "12h"
-      RCON_HOST: mc
-      PRE_BACKUP_SCRIPT: |
-        echo "Before backup!"
-        echo "Also before backup from $$RCON_HOST to $$DEST_DIR"
-      POST_BACKUP_SCRIPT_FILE: /post-backup.sh
-    volumes:
-      - /mnt/ssd/mc:/data:ro
-      - /mnt/ssd/mc-backups-temp:/backups
-      - ./post-backup.sh:/post-backup.sh:ro
-    restart: always
-
-  mc-nginx:
-    image: nginx
-    security_opt:
-      - no-new-privileges:true
-    volumes:
-      - ./www:/usr/share/nginx/html:ro
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.nginx.entrypoints=web"
-      - "traefik.http.routers.nginx.rule=Host(`mc.cow.pet`)"
-      - "traefik.http.routers.nginx-secure.entrypoints=websecure"
-      - "traefik.http.routers.nginx-secure.rule=Host(`mc.cow.pet`)"
-    networks:
-      - traefik
-    restart: always
-
 networks:
   traefik:
     external: true
