@@ -22,7 +22,7 @@ services:
     image: seafileltd/seafile-mc:11.0-latest
     container_name: seafile
     volumes:
-      - /mnt/hdd/seafile:/shared   # Required, specifies the path to Seafile data persistent store.
+      - /mnt/ssd/seafile:/shared   # Required, specifies the path to Seafile data persistent store.
     environment:
       - DB_ROOT_PASSWD=${DB_ROOT_PASSWD}
       - DB_HOST=db

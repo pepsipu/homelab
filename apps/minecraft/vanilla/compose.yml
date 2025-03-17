@@ -40,3 +40,5 @@ services:
 networks:
   traefik:
     external: true
+  minecraft:
+    external: true
