@@ -22,11 +22,11 @@ services:
     image: seafileltd/seafile-mc:11.0-latest
     container_name: seafile
     volumes:
-      - /mnt/ssd/seafile:/shared   # Required, specifies the path to Seafile data persistent store.
+      - /mnt/ssd/seafile/data:/shared   # Required, specifies the path to Seafile data persistent store.
     environment:
       - DB_ROOT_PASSWD=${DB_ROOT_PASSWD}
       - DB_HOST=db
-      - TIME_ZONE=Etc/UTC  # Optional, default is UTC. Should be uncomment and set to your local time zone.
+      - TIME_ZONE=America/Los_Angeles  # Optional, default is UTC. Should be uncomment and set to your local time zone.
       - SEAFILE_SERVER_LETSENCRYPT=false   # Whether to use https or not.
       - SEAFILE_ADMIN_EMAIL=${SEAFILE_ADMIN_EMAIL}
       - SEAFILE_ADMIN_PASSWORD=${SEAFILE_ADMIN_PASSWORD}
@@ -49,6 +49,3 @@ networks:
   seafile-net:
   traefik:
     external: true
-
-volumes:
-  seafile-db:
