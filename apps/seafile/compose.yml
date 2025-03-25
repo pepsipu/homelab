@@ -7,7 +7,7 @@ services:
       - MYSQL_LOG_CONSOLE=true
       - MARIADB_AUTO_UPGRADE=1
     volumes:
-      - seafile-db:/var/lib/mysql  # Required, specifies the path to MySQL data persistent store.
+      - /mnt/ssd/seafile/db:/var/lib/mysql  # Required, specifies the path to MySQL data persistent store.
     networks:
       - seafile-net
 
@@ -19,7 +19,7 @@ services:
       - seafile-net
 
   seafile:
-    image: seafileltd/seafile-mc:11.0-latest
+    image: seafileltd/seafile-mc:latest
     container_name: seafile
     volumes:
       - /mnt/ssd/seafile/data:/shared   # Required, specifies the path to Seafile data persistent store.
@@ -44,6 +44,7 @@ services:
       - "traefik.http.routers.seafile.rule=Host(`files.cow.pet`)"
       - "traefik.http.routers.seafile-secure.entrypoints=websecure"
       - "traefik.http.routers.seafile-secure.rule=Host(`files.cow.pet`)"
+      - "traefik.http.services.seafile.loadbalancer.server.port=8000"
 
 networks:
   seafile-net:
