@@ -8,7 +8,8 @@ services:
     environment:
       EULA: "TRUE"
       TYPE: "PAPER"
-      PAPER_CHANNEL: "experimental"
+      VERSION: "1.21.4"
+      # PAPER_CHANNEL: "experimental"
       MOTD: "\u00a7c\u00a7l@ mc.cow.pet @\u00a7r\n\u00a73MEET MILFS\u00a7r | \u00a76PET COWS\u00a7r | \u00a7dPUNCH MINORS"
       ICON: "https://upload.wikimedia.org/wikipedia/commons/e/ee/Spot_the_cow.png"
       MODRINTH_PROJECTS: >
