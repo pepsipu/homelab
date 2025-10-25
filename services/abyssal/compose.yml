@@ -1,0 +1,18 @@
+services:
+  mc:
+    image: itzg/minecraft-server
+    tty: true
+    stdin_open: true
+    ports:
+      - "25565:25569"
+    environment:
+      EULA: "TRUE"
+      MOTD: "\u00a7c\u00a7l@ cow.pet @\u00a7r\n\u00a73MEET MILFS\u00a7r | \u00a76PET ANDREW\u00a7r | \u00a7dPUNCH DAVID"
+      ICON: "https://upload.wikimedia.org/wikipedia/commons/e/ee/Spot_the_cow.png"
+      TZ: "America/Los_Angeles"
+      TYPE: "CUSTOM"
+      CUSTOM_SERVER: "/data/server.jar"
+      MEMORY: "13G"
+    volumes:
+      - ./server-data:/data
+    restart: always
