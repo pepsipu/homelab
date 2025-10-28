@@ -6,19 +6,107 @@ services:
     environment:
       - TZ=America/Los_Angeles
     volumes:
-      - /mnt/ssd/jellyfin/config:/config
-      - /mnt/ssd/jellyfin/cache:/cache
-      # Update this to your actual media library path(s)
-      - /mnt/ssd/media:/media:ro
+      - ./config/jellyfin/config:/config
+      - ./config/jellyfin/cache:/cache
+      - /mnt/ssd/stream/media:/media:ro
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.jellyfin.entrypoints=web"
-      - "traefik.http.routers.jellyfin.rule=Host(`stream.cow.pet`)"
-      - "traefik.http.routers.jellyfin-secure.entrypoints=websecure"
-      - "traefik.http.routers.jellyfin-secure.rule=Host(`stream.cow.pet`)"
-      - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
-    networks:
-      - traefik
+      - "traefik.docker.network=traefik"
+      - "traefik.http.routers.stream.rule=Host(`stream.cow.pet`)"
+      - "traefik.http.routers.stream.entrypoints=websecure"
+      - "traefik.http.services.stream.loadbalancer.server.port=8096"
+    networks: [traefik]
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    restart: unless-stopped
+    environment:
+      - TZ=America/Los_Angeles
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - ./config/sonarr:/config
+      - /mnt/ssd/stream/media:/media/
+      - /mnt/ssd/stream/downloads:/downloads      # RDTClient completes here
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik"
+      - "traefik.http.routers.sonarr.rule=Host(`sonarr.stream.cow.pet`)"
+      - "traefik.http.routers.sonarr.entrypoints=websecure"
+      - "traefik.http.services.sonarr.loadbalancer.server.port=8989"
+    networks: [traefik]
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    restart: unless-stopped
+    environment:
+      - TZ=America/Los_Angeles
+    volumes:
+      - ./config/prowlarr:/config
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik"
+      - "traefik.http.routers.prowlarr.rule=Host(`prowlarr.stream.cow.pet`)"
+      - "traefik.http.routers.prowlarr.entrypoints=websecure"
+      - "traefik.http.services.prowlarr.loadbalancer.server.port=9696"
+    networks: [traefik]
+
+  rdtclient:
+    image: rogerfar/rdtclient:latest
+    container_name: rdtclient
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Los_Angeles
+    volumes:
+      - ./config/rdtclient:/data/db
+      - /mnt/ssd/stream/downloads:/data/downloads
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik"
+      - "traefik.http.routers.rdtclient.rule=Host(`rdtclient.stream.cow.pet`)"
+      - "traefik.http.routers.rdtclient.entrypoints=websecure"
+      - "traefik.http.services.rdtclient.loadbalancer.server.port=6500"
+    networks: [traefik]
+  
+  jellyseerr:
+    image: fallenbagel/jellyseerr:latest
+    container_name: jellyseerr
+    restart: unless-stopped
+    environment:
+      - TZ=America/Los_Angeles
+    volumes:
+      - ./config/jellyseerr:/app/config
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik"
+      - "traefik.http.routers.jellyseerr.rule=Host(`jellyseerr.stream.cow.pet`)"
+      - "traefik.http.routers.jellyseerr.entrypoints=websecure"
+      - "traefik.http.services.jellyseerr.loadbalancer.server.port=5055"
+    networks: [traefik]
+
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    restart: unless-stopped
+    environment:
+      - TZ=America/Los_Angeles
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - ./config/bazarr:/config
+      - /mnt/ssd/stream/media:/media    # Bazarr writes subtitles next to media
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik"
+      - "traefik.http.routers.bazarr.rule=Host(`bazarr.stream.cow.pet`)"
+      - "traefik.http.routers.bazarr.entrypoints=websecure"
+      - "traefik.http.services.bazarr.loadbalancer.server.port=6767"
+    networks: [traefik]
+
 
 networks:
   traefik:
