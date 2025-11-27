@@ -3,17 +3,26 @@ services:
     image: jellyfin/jellyfin:latest
     container_name: jellyfin
     restart: unless-stopped
+    devices:
+      - /dev/dri/renderD128:/dev/dri/renderD128
+      - /dev/dri/card0:/dev/dri/card0
     environment:
+      - LIBVA_DRIVER_NAME=iHD  
       - TZ=America/Los_Angeles
+    group_add:
+      - "105"
     volumes:
       - ./config/jellyfin/config:/config
       - ./config/jellyfin/cache:/cache
-      - /mnt/ssd/stream/media:/media:ro
+      - /mnt/ssd/stream/media:/media
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik"
       - "traefik.http.routers.stream.rule=Host(`stream.cow.pet`)"
       - "traefik.http.routers.stream.entrypoints=websecure"
+      - "traefik.http.routers.stream-web.rule=Host(`stream.cow.pet`)"
+      - "traefik.http.routers.stream-web.entrypoints=web"
+      - "traefik.http.routers.stream-web.service=stream"
       - "traefik.http.services.stream.loadbalancer.server.port=8096"
     networks: [traefik]
 
@@ -34,6 +43,9 @@ services:
       - "traefik.docker.network=traefik"
       - "traefik.http.routers.sonarr.rule=Host(`sonarr.stream.cow.pet`)"
       - "traefik.http.routers.sonarr.entrypoints=websecure"
+      - "traefik.http.routers.sonarr-web.rule=Host(`sonarr.stream.cow.pet`)"
+      - "traefik.http.routers.sonarr-web.entrypoints=web"
+      - "traefik.http.routers.sonarr-web.service=sonarr"
       - "traefik.http.services.sonarr.loadbalancer.server.port=8989"
     networks: [traefik]
 
@@ -50,28 +62,60 @@ services:
       - "traefik.docker.network=traefik"
       - "traefik.http.routers.prowlarr.rule=Host(`prowlarr.stream.cow.pet`)"
       - "traefik.http.routers.prowlarr.entrypoints=websecure"
+      - "traefik.http.routers.prowlarr-web.rule=Host(`prowlarr.stream.cow.pet`)"
+      - "traefik.http.routers.prowlarr-web.entrypoints=web"
+      - "traefik.http.routers.prowlarr-web.service=prowlarr"
       - "traefik.http.services.prowlarr.loadbalancer.server.port=9696"
     networks: [traefik]
-
-  rdtclient:
-    image: rogerfar/rdtclient:latest
-    container_name: rdtclient
+  # Gluetun VPN client (ProtonVPN) that qbittorrent will share network with
+  gluetun:
+    image: qmcgaw/gluetun:latest
+    container_name: qbittorrent-vpn
     restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    env_file:
+      - .env
+    environment:
+      - VPN_SERVICE_PROVIDER=protonvpn
+      - VPN_TYPE=wireguard
+      - VPN_PORT_FORWARDING=on
+      - TZ=America/Los_Angeles
+      # Allow Traefik to reach qBittorrent Web UI inside this network namespace
+      - FIREWALL_INPUT_PORTS=8080
+      - VPN_PORT_FORWARDING_UP_COMMAND=/bin/sh -c 'wget -O- --retry-connrefused --post-data "json={\"listen_port\":{{PORTS}}}" http://localhost:8080/api/v2/app/setPreferences 2>&1'
+    volumes:
+      - ./config/gluetun:/gluetun
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik"
+      - "traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.stream.cow.pet`)"
+      - "traefik.http.routers.qbittorrent.entrypoints=websecure"
+      - "traefik.http.routers.qbittorrent-web.rule=Host(`qbittorrent.stream.cow.pet`)"
+      - "traefik.http.routers.qbittorrent-web.entrypoints=web"
+      - "traefik.http.routers.qbittorrent-web.service=qbittorrent"
+      - "traefik.http.services.qbittorrent.loadbalancer.server.port=8080"
+    networks: [traefik]
+
+  # qBittorrent routed through ProtonVPN via Gluetun
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    restart: unless-stopped
+    network_mode: "service:gluetun"
+    depends_on:
+      - gluetun
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=America/Los_Angeles
+      - WEBUI_PORT=8080
     volumes:
-      - ./config/rdtclient:/data/db
-      - /mnt/ssd/stream/downloads:/data/downloads
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=traefik"
-      - "traefik.http.routers.rdtclient.rule=Host(`rdtclient.stream.cow.pet`)"
-      - "traefik.http.routers.rdtclient.entrypoints=websecure"
-      - "traefik.http.services.rdtclient.loadbalancer.server.port=6500"
-    networks: [traefik]
-  
+      - ./config/qbittorrent:/config
+      - /mnt/ssd/stream/downloads:/downloads
+
   jellyseerr:
     image: fallenbagel/jellyseerr:latest
     container_name: jellyseerr
@@ -85,6 +129,9 @@ services:
       - "traefik.docker.network=traefik"
       - "traefik.http.routers.jellyseerr.rule=Host(`jellyseerr.stream.cow.pet`)"
       - "traefik.http.routers.jellyseerr.entrypoints=websecure"
+      - "traefik.http.routers.jellyseerr-web.rule=Host(`jellyseerr.stream.cow.pet`)"
+      - "traefik.http.routers.jellyseerr-web.entrypoints=web"
+      - "traefik.http.routers.jellyseerr-web.service=jellyseerr"
       - "traefik.http.services.jellyseerr.loadbalancer.server.port=5055"
     networks: [traefik]
 
@@ -104,6 +151,9 @@ services:
       - "traefik.docker.network=traefik"
       - "traefik.http.routers.bazarr.rule=Host(`bazarr.stream.cow.pet`)"
       - "traefik.http.routers.bazarr.entrypoints=websecure"
+      - "traefik.http.routers.bazarr-web.rule=Host(`bazarr.stream.cow.pet`)"
+      - "traefik.http.routers.bazarr-web.entrypoints=web"
+      - "traefik.http.routers.bazarr-web.service=bazarr"
       - "traefik.http.services.bazarr.loadbalancer.server.port=6767"
     networks: [traefik]
 
