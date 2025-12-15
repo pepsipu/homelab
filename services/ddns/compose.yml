@@ -10,6 +10,6 @@ services:
     environment:
       - IP6_PROVIDER=none
       - CLOUDFLARE_API_TOKEN=${CF_API_KEY}
-      - DOMAINS=cow.pet, mc.cow.pet, sso.cow.pet, stream.cow.pet, containers.cow.pet, sonarr.stream.cow.pet, prowlarr.stream.cow.pet, qbittorrent.stream.cow.pet, stremio.stream.cow.pet, jellyseerr.stream.cow.pet, bazarr.stream.cow.pet
+      - DOMAINS=*.cow.pet, cow.pet
       - PROXIED=false
       - QUIET=true
