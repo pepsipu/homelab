@@ -1,0 +1,19 @@
+services:
+  mc-router:
+    image: itzg/mc-router
+    restart: unless-stopped
+    ports:
+      - "25565:25565"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    command: >
+      -in-docker
+      -auto-scale-up
+      -auto-scale-down
+      -auto-scale-down-after=10m
+    networks:
+      - minecraft
+
+networks:
+  minecraft:
+    external: true

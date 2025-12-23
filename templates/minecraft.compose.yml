@@ -1,0 +1,57 @@
+services:
+  mc-base:
+    image: itzg/minecraft-server
+    tty: true
+    stdin_open: true
+
+    restart: unless-stopped # router will restart so no always
+
+    environment:
+      EULA: "TRUE"
+      # for mc-backup
+      ENABLE_RCON: "true"
+      RCON_PASSWORD: ${RCON_PASSWORD:?set RCON_PASSWORD}
+      TZ: "America/Los_Angeles"
+
+    volumes:
+      - /mnt/ssd/minecraft/data/${SERVER_NAME:?set SERVER_NAME}:/data
+
+    networks:
+      - minecraft
+
+    labels:
+      # at least this label is required for docker discovery routing
+      mc-router.host: ${MC_HOST:?set MC_HOST}
+
+      mc-router.auto-scale-up: "true"
+      mc-router.auto-scale-down: "true"
+      mc-router.auto-scale-asleep-motd: "\u00a7c\u00a7l@ zzz... @\u00a7r\n\u00a73join to wake up!\u00a7"
+      mc-router.network: "minecraft"
+
+  mc-backup-base:
+    image: itzg/mc-backup
+    restart: unless-stopped
+    depends_on:
+      - mc
+
+    environment:
+      # connect to the mc service within the same compose project
+      RCON_HOST: mc
+      RCON_PASSWORD: ${RCON_PASSWORD:?set RCON_PASSWORD}
+
+      BACKUP_ON_STARTUP: ${BACKUP_ON_STARTUP:-true}
+      BACKUP_INTERVAL: ${BACKUP_INTERVAL:-12h}
+      PRUNE_BACKUPS_DAYS: ${PRUNE_BACKUPS_DAYS:-3}
+      PAUSE_IF_NO_PLAYERS: ${PAUSE_IF_NO_PLAYERS:-true}
+      TZ: ${TZ:-America/Los_Angeles}
+
+    volumes:
+      - /mnt/ssd/minecraft/data/${SERVER_NAME:?set SERVER_NAME}:/data:ro
+      - /mnt/ssd/minecraft/backup/${SERVER_NAME:?set SERVER_NAME}:/backups
+
+    networks:
+      - minecraft
+
+networks:
+  minecraft:
+    external: true

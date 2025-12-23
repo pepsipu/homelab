@@ -1,0 +1,25 @@
+services:
+  mc:
+    extends:
+      file: ../../../templates/minecraft.compose.yml
+      service: mc-base
+    environment:
+      TYPE: "MODRINTH"
+      VERSION: "1.21.1"
+      MODRINTH_MODPACK: "cobblemon-fabric"
+      MODRINTH_LOADER: "fabric"
+      MODRINTH_MODPACK_VERSION_TYPE: "release"
+      MOTD: "\u00a7c\u00a7l@ pkmn.cow.pet @\u00a7r\n\u00a73MEET MILFS\u00a7r | \u00a76PET POKEMON\u00a7r | \u00a7dPUNCH MINORS"
+      ICON: "https://upload.wikimedia.org/wikipedia/commons/e/ee/Spot_the_cow.png"
+      MEMORY: 6G
+      DIFFICULTY: "normal"
+  
+  mc-backup:
+    extends:
+      file: ../../../templates/minecraft.compose.yml
+      service: mc-backup-base
+
+
+networks:
+  minecraft:
+    external: true
