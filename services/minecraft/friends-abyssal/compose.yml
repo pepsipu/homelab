@@ -11,6 +11,11 @@ services:
       MEMORY: "13G"
     labels:
       mc-router.port: 25569
+  
+  mc-backup:
+    extends:
+      file: ../../../templates/minecraft.compose.yml
+      service: mc-backup-base
 
 networks:
   minecraft:
