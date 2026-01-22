@@ -1,7 +1,7 @@
 services:
   mc:
     extends:
-      file: ../../../templates/minecraft.compose.yml
+      file: ../template.compose.yml
       service: mc-base
     environment:
       MOTD: "\u00a7c\u00a7l@ abyssal.cow.pet @\u00a7r\n\u00a73MEET MILFS\u00a7r | \u00a76PET ANDREW\u00a7r | \u00a7dPUNCH DAVID"
@@ -14,7 +14,7 @@ services:
   
   mc-backup:
     extends:
-      file: ../../../templates/minecraft.compose.yml
+      file: ../template.compose.yml
       service: mc-backup-base
 
 networks:

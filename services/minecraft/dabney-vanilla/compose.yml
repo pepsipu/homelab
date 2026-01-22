@@ -1,7 +1,7 @@
 services:
   mc:
     extends:
-      file: ../../../templates/minecraft.compose.yml
+      file: ../template.compose.yml
       service: mc-base
     environment:
       TYPE: "PAPER"
@@ -21,7 +21,7 @@ services:
 
   mc-backup:
     extends:
-      file: ../../../templates/minecraft.compose.yml
+      file: ../template.compose.yml
       service: mc-backup-base
 
   mc-nginx:
