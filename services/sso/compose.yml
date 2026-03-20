@@ -3,7 +3,7 @@ services:
     image: kanidm/server:latest
     restart: unless-stopped
     volumes:
-      - kanidm-data:/data
+      - ./data:/data
       - ./server.toml:/data/server.toml:ro
       - ./certs/chain.pem:/data/chain.pem:ro
       - ./certs/key.pem:/data/key.pem:ro
@@ -19,6 +19,3 @@ services:
 networks:
   traefik:
     external: true
-
-volumes:
-  kanidm-data:

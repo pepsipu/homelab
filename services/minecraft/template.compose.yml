@@ -14,7 +14,7 @@ services:
       TZ: "America/Los_Angeles"
 
     volumes:
-      - /mnt/ssd/minecraft/data/${SERVER_NAME:?set SERVER_NAME}:/data
+      - ./${SERVER_NAME:?set SERVER_NAME}/data:/data
 
     networks:
       - minecraft
@@ -46,8 +46,8 @@ services:
       TZ: ${TZ:-America/Los_Angeles}
 
     volumes:
-      - /mnt/ssd/minecraft/data/${SERVER_NAME:?set SERVER_NAME}:/data:ro
-      - /mnt/ssd/minecraft/backup/${SERVER_NAME:?set SERVER_NAME}:/backups
+      - ./${SERVER_NAME:?set SERVER_NAME}/data/:/data:ro
+      - ./${SERVER_NAME:?set SERVER_NAME}/backups:/backups
 
     networks:
       - minecraft
